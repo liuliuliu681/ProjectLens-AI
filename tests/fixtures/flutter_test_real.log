@@ -1,0 +1,268 @@
+
+┌─────────────────────────────────────────────────────────┐
+│ A new version of Flutter is available!                  │
+│                                                         │
+│ To update to the latest version, run "flutter upgrade". │
+└─────────────────────────────────────────────────────────┘
+00:00 +0: loading D:/自改账单记录/test/android_runtime_regression_test.dart
+00:00 +0: D:/自改账单记录/test/android_runtime_regression_test.dart: Android 风格下正常图片不会阻塞项目列表
+00:00 +1: D:/自改账单记录/test/android_runtime_regression_test.dart: Android 风格下正常图片不会阻塞项目列表
+00:00 +2: D:/自改账单记录/test/core_ui_finish_test.dart: 账本读取真实整数与小数采购数量，普通账目不伪造数量
+00:00 +3: D:/自改账单记录/test/core_ui_finish_test.dart: 账本读取真实整数与小数采购数量，普通账目不伪造数量
+00:00 +4: D:/自改账单记录/test/core_ui_finish_test.dart: 账本读取真实整数与小数采购数量，普通账目不伪造数量
+00:00 +5: D:/自改账单记录/test/android_runtime_regression_test.dart: 图片文件不存在时项目页仍显示项目与错误占位
+00:00 +6: D:/自改账单记录/test/android_runtime_regression_test.dart: 图片文件不存在时项目页仍显示项目与错误占位
+00:00 +7: D:/自改账单记录/test/android_runtime_regression_test.dart: 图片文件不存在时项目页仍显示项目与错误占位
+00:00 +8: D:/自改账单记录/test/android_runtime_regression_test.dart: 图片文件不存在时项目页仍显示项目与错误占位
+00:00 +9: D:/自改账单记录/test/android_runtime_regression_test.dart: 图片文件不存在时项目页仍显示项目与错误占位
+00:01 +10: D:/自改账单记录/test/android_runtime_regression_test.dart: 图片文件不存在时项目页仍显示项目与错误占位
+00:01 +11: D:/自改账单记录/test/entry_ui_v1_test.dart: A 默认支出直接展示数量、分类与去向
+00:01 +12: D:/自改账单记录/test/entry_ui_v1_test.dart: A 默认支出直接展示数量、分类与去向
+00:01 +13: D:/自改账单记录/test/entry_ui_v1_test.dart: A 默认支出直接展示数量、分类与去向
+00:01 +14: D:/自改账单记录/test/entry_ui_v1_test.dart: A 默认支出直接展示数量、分类与去向
+00:01 +15: D:/自改账单记录/test/entry_ui_v1_test.dart: A 默认支出直接展示数量、分类与去向
+00:01 +16: D:/自改账单记录/test/entry_ui_v1_test.dart: A 默认支出直接展示数量、分类与去向
+00:01 +17: D:/自改账单记录/test/entry_ui_v1_test.dart: A 默认支出直接展示数量、分类与去向
+00:01 +18: D:/自改账单记录/test/core_ui_finish_test.dart: 大量真实分类直接点选、更多分类可滚动选中，去向一步打开
+00:01 +19: D:/自改账单记录/test/core_ui_finish_test.dart: 大量真实分类直接点选、更多分类可滚动选中，去向一步打开
+00:01 +20: D:/自改账单记录/test/core_ui_finish_test.dart: 大量真实分类直接点选、更多分类可滚动选中，去向一步打开
+00:02 +21: D:/自改账单记录/test/core_ui_finish_test.dart: 大量真实分类直接点选、更多分类可滚动选中，去向一步打开
+00:02 +22: D:/自改账单记录/test/core_ui_finish_test.dart: 大量真实分类直接点选、更多分类可滚动选中，去向一步打开
+00:02 +23: D:/自改账单记录/test/core_ui_finish_test.dart: 大量真实分类直接点选、更多分类可滚动选中，去向一步打开
+00:02 +24: D:/自改账单记录/test/core_ui_finish_test.dart: 大量真实分类直接点选、更多分类可滚动选中，去向一步打开
+00:02 +25: D:/自改账单记录/test/core_ui_finish_test.dart: 大量真实分类直接点选、更多分类可滚动选中，去向一步打开
+00:02 +26: D:/自改账单记录/test/core_ui_finish_test.dart: 大量真实分类直接点选、更多分类可滚动选中，去向一步打开
+00:02 +26: D:/自改账单记录/test/android_runtime_regression_test.dart: 真实缩略图队列在异常和超时后都会完成并继续后续任务
+[Thumbnail] failed for [local-temp]/queue-throws.jpg: decode failed
+00:02 +27: D:/自改账单记录/test/core_ui_finish_test.dart: 大量真实分类直接点选、更多分类可滚动选中，去向一步打开
+00:02 +28: D:/自改账单记录/test/core_ui_finish_test.dart: 大量真实分类直接点选、更多分类可滚动选中，去向一步打开
+00:02 +29: D:/自改账单记录/test/core_ui_finish_test.dart: 大量真实分类直接点选、更多分类可滚动选中，去向一步打开
+00:02 +30: D:/自改账单记录/test/core_ui_finish_test.dart: 大量真实分类直接点选、更多分类可滚动选中，去向一步打开
+00:02 +31: D:/自改账单记录/test/core_ui_finish_test.dart: 大量真实分类直接点选、更多分类可滚动选中，去向一步打开
+00:02 +32: D:/自改账单记录/test/inventory_ui_v1_test.dart: A 默认库存页 390x844
+00:02 +33: D:/自改账单记录/test/inventory_ui_v1_test.dart: A 默认库存页 390x844
+00:02 +34: D:/自改账单记录/test/inventory_ui_v1_test.dart: A 默认库存页 390x844
+00:02 +35: D:/自改账单记录/test/inventory_ui_v1_test.dart: A 默认库存页 390x844
+00:02 +36: D:/自改账单记录/test/inventory_ui_v1_test.dart: A 默认库存页 390x844
+00:02 +37: D:/自改账单记录/test/inventory_ui_v1_test.dart: A 默认库存页 390x844
+00:02 +38: D:/自改账单记录/test/inventory_ui_v1_test.dart: A 默认库存页 390x844
+00:02 +39: D:/自改账单记录/test/inventory_ui_v1_test.dart: A 默认库存页 390x844
+00:02 +40: D:/自改账单记录/test/inventory_ui_v1_test.dart: A 默认库存页 390x844
+00:02 +41: D:/自改账单记录/test/inventory_ui_v1_test.dart: A 默认库存页 390x844
+00:02 +42: D:/自改账单记录/test/inventory_ui_v1_test.dart: A 默认库存页 390x844
+00:02 +43: D:/自改账单记录/test/inventory_ui_v1_test.dart: A 默认库存页 390x844
+00:02 +44: D:/自改账单记录/test/inventory_ui_v1_test.dart: A 默认库存页 390x844
+00:02 +45: D:/自改账单记录/test/entry_ui_v1_test.dart: C 项目上下文跟随真实分配，移除后消失
+00:02 +46: D:/自改账单记录/test/android_runtime_regression_test.dart: 真实缩略图队列在异常和超时后都会完成并继续后续任务
+00:03 +47: D:/自改账单记录/test/android_runtime_regression_test.dart: 真实缩略图队列在异常和超时后都会完成并继续后续任务
+00:03 +48: D:/自改账单记录/test/android_runtime_regression_test.dart: 真实缩略图队列在异常和超时后都会完成并继续后续任务
+00:03 +49: D:/自改账单记录/test/android_runtime_regression_test.dart: 真实缩略图队列在异常和超时后都会完成并继续后续任务
+[Thumbnail] failed for [local-temp]/queue-pending.jpg: TimeoutException after 0:00:01.000000: Future not completed
+00:03 +50: D:/自改账单记录/test/ledger_service_test.dart: 交易按 occurredAt 倒序，相同发生时间再按 createdAt 倒序
+00:03 +51: D:/自改账单记录/test/ledger_service_test.dart: 交易按 occurredAt 倒序，相同发生时间再按 createdAt 倒序
+00:03 +52: D:/自改账单记录/test/ledger_service_test.dart: 交易按 occurredAt 倒序，相同发生时间再按 createdAt 倒序
+00:03 +53: D:/自改账单记录/test/ledger_service_test.dart: 交易按 occurredAt 倒序，相同发生时间再按 createdAt 倒序
+00:03 +54: D:/自改账单记录/test/ledger_service_test.dart: 交易按 occurredAt 倒序，相同发生时间再按 createdAt 倒序
+00:03 +55: D:/自改账单记录/test/ledger_service_test.dart: 交易按 occurredAt 倒序，相同发生时间再按 createdAt 倒序
+00:03 +56: D:/自改账单记录/test/ledger_service_test.dart: 交易按 occurredAt 倒序，相同发生时间再按 createdAt 倒序
+00:03 +57: D:/自改账单记录/test/ledger_service_test.dart: 交易按 occurredAt 倒序，相同发生时间再按 createdAt 倒序
+00:03 +58: D:/自改账单记录/test/ledger_service_test.dart: 交易按 occurredAt 倒序，相同发生时间再按 createdAt 倒序
+00:03 +59: D:/自改账单记录/test/ledger_service_test.dart: 交易按 occurredAt 倒序，相同发生时间再按 createdAt 倒序
+00:03 +60: D:/自改账单记录/test/phase2_ui_test.dart: 项目编辑页保存名称且不影响项目标识
+00:03 +61: D:/自改账单记录/test/phase2_ui_test.dart: 项目编辑页保存名称且不影响项目标识
+00:03 +62: D:/自改账单记录/test/phase2_ui_test.dart: 项目编辑页保存名称且不影响项目标识
+00:03 +63: D:/自改账单记录/test/phase2_ui_test.dart: 项目编辑页保存名称且不影响项目标识
+00:03 +64: D:/自改账单记录/test/phase2_ui_test.dart: 项目编辑页保存名称且不影响项目标识
+00:03 +65: D:/自改账单记录/test/phase2_ui_test.dart: 项目编辑页保存名称且不影响项目标识
+00:03 +66: D:/自改账单记录/test/phase2_ui_test.dart: 项目编辑页保存名称且不影响项目标识
+00:03 +67: D:/自改账单记录/test/phase2_ui_test.dart: 项目编辑页保存名称且不影响项目标识
+00:03 +68: D:/自改账单记录/test/phase2_ui_test.dart: 项目编辑页保存名称且不影响项目标识
+00:03 +69: D:/自改账单记录/test/phase2_ui_test.dart: 项目编辑页保存名称且不影响项目标识
+00:03 +70: D:/自改账单记录/test/phase2_ui_test.dart: 项目编辑页保存名称且不影响项目标识
+00:03 +71: D:/自改账单记录/test/phase2_ui_test.dart: 项目编辑页保存名称且不影响项目标识
+00:03 +72: D:/自改账单记录/test/phase2_ui_test.dart: 项目编辑页保存名称且不影响项目标识
+00:03 +73: D:/自改账单记录/test/phase2_ui_test.dart: 项目编辑页保存名称且不影响项目标识
+00:03 +74: D:/自改账单记录/test/phase2_ui_test.dart: 项目编辑页保存名称且不影响项目标识
+00:03 +75: D:/自改账单记录/test/phase2_ui_test.dart: 项目编辑页保存名称且不影响项目标识
+00:03 +76: D:/自改账单记录/test/phase2_ui_test.dart: 项目编辑页保存名称且不影响项目标识
+00:03 +77: D:/自改账单记录/test/phase2_ui_test.dart: 项目编辑页保存名称且不影响项目标识
+00:03 +78: D:/自改账单记录/test/phase3_ledger_home_test.dart: 账本默认时间范围是全部时间
+00:03 +79: D:/自改账单记录/test/phase3_ledger_home_test.dart: 账本默认时间范围是全部时间
+00:04 +80: D:/自改账单记录/test/phase3_ledger_home_test.dart: 账本默认时间范围是全部时间
+00:04 +81: D:/自改账单记录/test/phase3_ledger_home_test.dart: 账本默认时间范围是全部时间
+00:04 +82: D:/自改账单记录/test/phase3_ledger_home_test.dart: 账本默认时间范围是全部时间
+00:04 +83: D:/自改账单记录/test/phase3_ledger_home_test.dart: 账本默认时间范围是全部时间
+00:04 +84: D:/自改账单记录/test/phase4_image_stability_test.dart: 普通项目瀑布流使用项目 ID 作为稳定 Key
+00:04 +85: D:/自改账单记录/test/phase4_image_stability_test.dart: 普通项目瀑布流使用项目 ID 作为稳定 Key
+00:04 +86: D:/自改账单记录/test/phase4_image_stability_test.dart: 普通项目瀑布流使用项目 ID 作为稳定 Key
+00:04 +87: D:/自改账单记录/test/phase4_image_stability_test.dart: 普通项目瀑布流使用项目 ID 作为稳定 Key
+00:04 +88: D:/自改账单记录/test/phase4_image_stability_test.dart: 普通项目瀑布流使用项目 ID 作为稳定 Key
+00:04 +89: D:/自改账单记录/test/phase4_image_stability_test.dart: 普通项目瀑布流使用项目 ID 作为稳定 Key
+00:04 +90: D:/自改账单记录/test/phase4_image_stability_test.dart: 普通项目瀑布流使用项目 ID 作为稳定 Key
+00:04 +91: D:/自改账单记录/test/phase4_image_stability_test.dart: 普通项目瀑布流使用项目 ID 作为稳定 Key
+00:04 +92: D:/自改账单记录/test/phase4_image_stability_test.dart: 普通项目瀑布流使用项目 ID 作为稳定 Key
+00:04 +93: D:/自改账单记录/test/phase4_image_stability_test.dart: 普通项目瀑布流使用项目 ID 作为稳定 Key
+00:04 +94: D:/自改账单记录/test/phase4_image_stability_test.dart: 普通项目瀑布流使用项目 ID 作为稳定 Key
+00:04 +95: D:/自改账单记录/test/phase4_image_stability_test.dart: 普通项目瀑布流使用项目 ID 作为稳定 Key
+00:04 +96: D:/自改账单记录/test/phase4_image_stability_test.dart: 普通项目瀑布流使用项目 ID 作为稳定 Key
+00:04 +97: D:/自改账单记录/test/phase4_image_stability_test.dart: 普通项目瀑布流使用项目 ID 作为稳定 Key
+00:04 +98: D:/自改账单记录/test/phase4_image_stability_test.dart: 普通项目瀑布流使用项目 ID 作为稳定 Key
+00:04 +99: D:/自改账单记录/test/phase4_image_stability_test.dart: 普通项目瀑布流使用项目 ID 作为稳定 Key
+00:04 +100: D:/自改账单记录/test/phase4_image_stability_test.dart: 普通项目瀑布流使用项目 ID 作为稳定 Key
+00:04 +101: D:/自改账单记录/test/phase4_image_stability_test.dart: 普通项目瀑布流使用项目 ID 作为稳定 Key
+00:04 +102: D:/自改账单记录/test/phase4_image_stability_test.dart: 普通项目瀑布流使用项目 ID 作为稳定 Key
+00:04 +103: D:/自改账单记录/test/phase4_image_stability_test.dart: 普通项目瀑布流使用项目 ID 作为稳定 Key
+00:04 +104: D:/自改账单记录/test/phase4_image_stability_test.dart: 普通项目瀑布流使用项目 ID 作为稳定 Key
+00:04 +105: D:/自改账单记录/test/phase4_image_stability_test.dart: 普通项目瀑布流使用项目 ID 作为稳定 Key
+00:04 +106: D:/自改账单记录/test/core_ui_finish_test.dart: 五页面长名称大金额与真实数据渲染 430dp
+00:04 +107: D:/自改账单记录/test/core_ui_finish_test.dart: 五页面长名称大金额与真实数据渲染 430dp
+00:04 +108: D:/自改账单记录/test/core_ui_finish_test.dart: 五页面长名称大金额与真实数据渲染 430dp
+00:04 +109: D:/自改账单记录/test/core_ui_finish_test.dart: 五页面长名称大金额与真实数据渲染 430dp
+00:04 +110: D:/自改账单记录/test/core_ui_finish_test.dart: 五页面长名称大金额与真实数据渲染 430dp
+00:04 +111: D:/自改账单记录/test/core_ui_finish_test.dart: 五页面长名称大金额与真实数据渲染 430dp
+00:04 +112: D:/自改账单记录/test/core_ui_finish_test.dart: 五页面长名称大金额与真实数据渲染 430dp
+00:04 +113: D:/自改账单记录/test/entry_ui_v1_test.dart: I 去向面板保留项目搜索、库存本地搜索和剩余数量快捷操作
+00:04 +114: D:/自改账单记录/test/entry_ui_v1_test.dart: I 去向面板保留项目搜索、库存本地搜索和剩余数量快捷操作
+00:04 +115: D:/自改账单记录/test/entry_ui_v1_test.dart: I 去向面板保留项目搜索、库存本地搜索和剩余数量快捷操作
+00:04 +116: D:/自改账单记录/test/entry_ui_v1_test.dart: I 去向面板保留项目搜索、库存本地搜索和剩余数量快捷操作
+00:04 +117: D:/自改账单记录/test/entry_ui_v1_test.dart: I 去向面板保留项目搜索、库存本地搜索和剩余数量快捷操作
+00:04 +118: D:/自改账单记录/test/entry_ui_v1_test.dart: I 去向面板保留项目搜索、库存本地搜索和剩余数量快捷操作
+00:04 +119: D:/自改账单记录/test/entry_ui_v1_test.dart: I 去向面板保留项目搜索、库存本地搜索和剩余数量快捷操作
+00:04 +120: D:/自改账单记录/test/entry_ui_v1_test.dart: I 去向面板保留项目搜索、库存本地搜索和剩余数量快捷操作
+00:04 +121: D:/自改账单记录/test/entry_ui_v1_test.dart: I 去向面板保留项目搜索、库存本地搜索和剩余数量快捷操作
+00:04 +122: D:/自改账单记录/test/entry_ui_v1_test.dart: I 去向面板保留项目搜索、库存本地搜索和剩余数量快捷操作
+00:04 +123: D:/自改账单记录/test/entry_ui_v1_test.dart: I 去向面板保留项目搜索、库存本地搜索和剩余数量快捷操作
+00:04 +124: D:/自改账单记录/test/entry_ui_v1_test.dart: I 去向面板保留项目搜索、库存本地搜索和剩余数量快捷操作
+00:04 +125: D:/自改账单记录/test/entry_ui_v1_test.dart: I 去向面板保留项目搜索、库存本地搜索和剩余数量快捷操作
+00:05 +126: D:/自改账单记录/test/entry_ui_v1_test.dart: I 去向面板保留项目搜索、库存本地搜索和剩余数量快捷操作
+00:05 +127: D:/自改账单记录/test/phase3_ledger_home_test.dart: 分类 BottomSheet 在分类很多时可滚动且无溢出
+00:05 +128: D:/自改账单记录/test/phase3_ledger_home_test.dart: 分类 BottomSheet 在分类很多时可滚动且无溢出
+00:05 +129: D:/自改账单记录/test/phase3_ledger_home_test.dart: 分类 BottomSheet 在分类很多时可滚动且无溢出
+00:05 +130: D:/自改账单记录/test/phase5_inventory_edit_test.dart: 已产生后续库存流水时编辑页提前禁用结构字段
+00:05 +131: D:/自改账单记录/test/phase5_inventory_edit_test.dart: 已产生后续库存流水时编辑页提前禁用结构字段
+00:05 +132: D:/自改账单记录/test/phase5_inventory_edit_test.dart: 已产生后续库存流水时编辑页提前禁用结构字段
+00:05 +133: D:/自改账单记录/test/phase5_inventory_edit_test.dart: 已产生后续库存流水时编辑页提前禁用结构字段
+00:05 +134: D:/自改账单记录/test/phase5_inventory_edit_test.dart: 已产生后续库存流水时编辑页提前禁用结构字段
+00:05 +135: D:/自改账单记录/test/phase5_inventory_edit_test.dart: 已产生后续库存流水时编辑页提前禁用结构字段
+00:05 +136: D:/自改账单记录/test/phase5_inventory_edit_test.dart: 已产生后续库存流水时编辑页提前禁用结构字段
+00:05 +137: D:/自改账单记录/test/phase5_inventory_edit_test.dart: 已产生后续库存流水时编辑页提前禁用结构字段
+00:05 +138: D:/自改账单记录/test/phase5_inventory_edit_test.dart: 已产生后续库存流水时编辑页提前禁用结构字段
+00:05 +139: D:/自改账单记录/test/phase5_inventory_edit_test.dart: 已产生后续库存流水时编辑页提前禁用结构字段
+00:05 +140: D:/自改账单记录/test/phase5_inventory_edit_test.dart: 已产生后续库存流水时编辑页提前禁用结构字段
+00:05 +141: D:/自改账单记录/test/phase5_inventory_edit_test.dart: 已产生后续库存流水时编辑页提前禁用结构字段
+00:05 +142: D:/自改账单记录/test/phase5_inventory_edit_test.dart: 已产生后续库存流水时编辑页提前禁用结构字段
+00:05 +143: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:05 +144: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:05 +145: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:05 +146: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:05 +147: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:05 +148: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:05 +149: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:05 +150: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:06 +151: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:06 +152: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:06 +153: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:06 +154: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:06 +155: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:06 +156: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:06 +157: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:06 +158: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:06 +159: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:06 +160: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:06 +161: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:06 +162: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:06 +163: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:06 +164: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:06 +165: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:06 +166: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:06 +167: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:06 +168: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:06 +169: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:06 +170: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:06 +171: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:06 +172: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:06 +173: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:06 +174: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:06 +175: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:06 +176: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:06 +177: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:06 +178: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:06 +179: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:06 +180: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:06 +181: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:06 +182: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:06 +183: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:06 +184: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:06 +185: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:06 +186: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:06 +187: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:06 +188: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:06 +189: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:07 +190: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:07 +191: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:07 +192: D:/自改账单记录/test/phase4_image_stability_test.dart: 多个带图项目快速往返滚动不丢失图片或抛异常
+00:07 +193: D:/自改账单记录/test/entry_ui_v1_test.dart: 390 库存 Sheet 搜索、新建与已有选择、数量和金额均可操作
+00:07 +194: D:/自改账单记录/test/entry_ui_v1_test.dart: 390 库存 Sheet 搜索、新建与已有选择、数量和金额均可操作
+00:07 +195: D:/自改账单记录/test/entry_ui_v1_test.dart: 390 库存 Sheet 搜索、新建与已有选择、数量和金额均可操作
+00:07 +196: D:/自改账单记录/test/entry_ui_v1_test.dart: 390 库存 Sheet 搜索、新建与已有选择、数量和金额均可操作
+00:07 +197: D:/自改账单记录/test/entry_ui_v1_test.dart: 390 库存 Sheet 搜索、新建与已有选择、数量和金额均可操作
+00:08 +198: D:/自改账单记录/test/entry_ui_v1_test.dart: 390 库存 Sheet 搜索、新建与已有选择、数量和金额均可操作
+00:08 +199: D:/自改账单记录/test/entry_ui_v1_test.dart: 390 库存 Sheet 搜索、新建与已有选择、数量和金额均可操作
+00:08 +200: D:/自改账单记录/test/entry_ui_v1_test.dart: 390 库存 Sheet 搜索、新建与已有选择、数量和金额均可操作
+00:08 +201: D:/自改账单记录/test/widget_smoke_test.dart: 新用户首页显示空状态且不会构建灰色错误页
+00:08 +202: D:/自改账单记录/test/phase4_image_stability_test.dart: 旧缩略图缺少元数据时只补读一次缩略图并持久化
+00:08 +203: D:/自改账单记录/test/purchase_distribution_ui_test.dart: 总数量小于已分配数量时阻止修改并显示就地错误
+00:08 +204: D:/自改账单记录/test/purchase_distribution_ui_test.dart: 总数量小于已分配数量时阻止修改并显示就地错误
+00:08 +205: D:/自改账单记录/test/purchase_distribution_ui_test.dart: 总数量小于已分配数量时阻止修改并显示就地错误
+00:08 +206: D:/自改账单记录/test/purchase_distribution_ui_test.dart: 总数量小于已分配数量时阻止修改并显示就地错误
+00:08 +207: D:/自改账单记录/test/purchase_distribution_ui_test.dart: 总数量小于已分配数量时阻止修改并显示就地错误
+00:08 +208: D:/自改账单记录/test/phase4_image_stability_test.dart: 普通项目按竖方横封面和两行标题形成稳定高度差
+00:08 +209: D:/自改账单记录/test/phase4_image_stability_test.dart: 普通项目按竖方横封面和两行标题形成稳定高度差
+00:08 +210: D:/自改账单记录/test/ui_usability_test.dart: 记一笔不再显示已物理删除的分类
+00:08 +211: D:/自改账单记录/test/ui_usability_test.dart: 记一笔不再显示已物理删除的分类
+00:08 +212: D:/自改账单记录/test/purchase_distribution_ui_test.dart: BottomSheet 支持项目与库存两类显式去向
+00:08 +213: D:/自改账单记录/test/purchase_distribution_ui_test.dart: BottomSheet 支持项目与库存两类显式去向
+00:09 +214: D:/自改账单记录/test/purchase_distribution_ui_test.dart: BottomSheet 支持项目与库存两类显式去向
+00:09 +215: D:/自改账单记录/test/purchase_distribution_ui_test.dart: BottomSheet 支持项目与库存两类显式去向
+00:09 +216: D:/自改账单记录/test/purchase_distribution_ui_test.dart: BottomSheet 支持项目与库存两类显式去向
+00:09 +217: D:/自改账单记录/test/purchase_distribution_ui_test.dart: BottomSheet 支持项目与库存两类显式去向
+00:09 +218: D:/自改账单记录/test/purchase_distribution_ui_test.dart: BottomSheet 支持项目与库存两类显式去向
+00:09 +219: D:/自改账单记录/test/purchase_distribution_ui_test.dart: BottomSheet 支持项目与库存两类显式去向
+00:09 +220: D:/自改账单记录/test/ui_usability_test.dart: 分类管理中预设分类也显示重命名和删除，确认后彻底消失
+00:09 +221: D:/自改账单记录/test/entry_ui_v1_test.dart: 长项目列表能滚动选中末项并继续到达数量和金额
+00:09 +222: D:/自改账单记录/test/entry_ui_v1_test.dart: 长项目列表能滚动选中末项并继续到达数量和金额
+00:09 +223: D:/自改账单记录/test/entry_ui_v1_test.dart: 长项目列表能滚动选中末项并继续到达数量和金额
+00:09 +224: D:/自改账单记录/test/entry_ui_v1_test.dart: 长项目列表能滚动选中末项并继续到达数量和金额
+00:09 +225: D:/自改账单记录/test/entry_ui_v1_test.dart: 长项目列表能滚动选中末项并继续到达数量和金额
+00:09 +226: D:/自改账单记录/test/entry_ui_v1_test.dart: 长项目列表能滚动选中末项并继续到达数量和金额
+00:09 +227: D:/自改账单记录/test/entry_ui_v1_test.dart: 长项目列表能滚动选中末项并继续到达数量和金额
+00:09 +228: D:/自改账单记录/test/phase4_image_stability_test.dart: 删除照片立即显示 3.5 秒撤销提示并按时消失
+00:09 +229: D:/自改账单记录/test/phase4_image_stability_test.dart: 删除照片立即显示 3.5 秒撤销提示并按时消失
+00:09 +230: D:/自改账单记录/test/phase4_image_stability_test.dart: 删除照片立即显示 3.5 秒撤销提示并按时消失
+00:09 +231: D:/自改账单记录/test/ui_usability_test.dart: 首页新版层级、统计卡、净收支与模块顺序正确
+00:09 +232: D:/自改账单记录/test/entry_ui_v1_test.dart: 编辑去向时全部剩余包含当前行原有数量
+00:09 +233: D:/自改账单记录/test/entry_ui_v1_test.dart: 编辑去向时全部剩余包含当前行原有数量
+00:09 +234: D:/自改账单记录/test/ui_usability_test.dart: 首页月度卡在零值和长金额下保持同宽同高
+00:09 +234 ~1: D:/自改账单记录/test/ui_usability_test.dart: 首页月度卡在零值和长金额下保持同宽同高
+00:09 +234 ~2: D:/自改账单记录/test/ui_usability_test.dart: 首页月度卡在零值和长金额下保持同宽同高
+00:09 +234 ~3: D:/自改账单记录/test/ui_usability_test.dart: 首页月度卡在零值和长金额下保持同宽同高
+00:09 +234 ~4: D:/自改账单记录/test/ui_usability_test.dart: 首页月度卡在零值和长金额下保持同宽同高
+00:09 +234 ~5: D:/自改账单记录/test/ui_usability_test.dart: 首页月度卡在零值和长金额下保持同宽同高
+00:09 +234 ~6: D:/自改账单记录/test/ui_usability_test.dart: 首页月度卡在零值和长金额下保持同宽同高
+00:09 +234 ~7: D:/自改账单记录/test/ui_usability_test.dart: 首页月度卡在零值和长金额下保持同宽同高
+00:09 +234 ~8: D:/自改账单记录/test/ui_usability_test.dart: 首页月度卡在零值和长金额下保持同宽同高
+00:09 +234 ~9: D:/自改账单记录/test/ui_usability_test.dart: 首页月度卡在零值和长金额下保持同宽同高
+00:09 +234 ~10: D:/自改账单记录/test/ui_usability_test.dart: 首页月度卡在零值和长金额下保持同宽同高
+00:09 +234 ~11: D:/自改账单记录/test/ui_usability_test.dart: 首页月度卡在零值和长金额下保持同宽同高
+00:09 +234 ~12: D:/自改账单记录/test/ui_usability_test.dart: 首页月度卡在零值和长金额下保持同宽同高
+00:09 +234 ~13: D:/自改账单记录/test/ui_usability_test.dart: 首页月度卡在零值和长金额下保持同宽同高
+00:09 +234 ~14: D:/自改账单记录/test/ui_usability_test.dart: 首页月度卡在零值和长金额下保持同宽同高
+00:09 +234 ~15: D:/自改账单记录/test/ui_usability_test.dart: 首页月度卡在零值和长金额下保持同宽同高
+00:09 +235 ~15: D:/自改账单记录/test/phase4_image_stability_test.dart: 连续删除照片只保留一个撤销提示
+00:09 +236 ~15: D:/自改账单记录/test/ui_usability_test.dart: 首页累计投入包含跨月账目，具体账目只在账本展示
+00:09 +237 ~15: D:/自改账单记录/test/phase4_image_stability_test.dart: 照片区域离开页面后旧删除提示立即移除
+00:10 +238 ~15: D:/自改账单记录/test/ui_usability_test.dart: 账本默认全部时间能看到跨月补录账目
+00:10 +239 ~15: D:/自改账单记录/test/phase4_image_stability_test.dart: 照片排序、封面更新、删除和撤销保持一致
+00:10 +240 ~15: D:/自改账单记录/test/ui_usability_test.dart: 关键页面在 390x844 和 360x800 下无布局异常
+00:10 +241 ~15: D:/自改账单记录/test/ui_usability_test.dart: 关键页面在 390x844 和 360x800 下无布局异常
+00:10 +242 ~15: All tests passed!

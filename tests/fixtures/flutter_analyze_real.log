@@ -1,0 +1,11 @@
+Analyzing ledger-ui-check...                                    
+
+   info - 'withData' is deprecated and shouldn't be used. Use PlatformFile.readAsBytes(); this parameter will be removed in a future release. Try replacing the use of the deprecated member with the replacement - lib\core\services\backup_service.dart:36:7 - deprecated_member_use
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\inventory\inventory_use_screen.dart:39:7 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\inventory\inventory_use_screen.dart:98:21 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\inventory\inventory_use_screen.dart:158:9 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\profile\profile_screen.dart:126:9 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\profile\profile_screen.dart:131:9 - curly_braces_in_flow_control_structures
+   info - Use the null-aware marker '?' rather than a null check via an 'if'. Try using '?' - lib\shared\widgets\common_widgets.dart:134:7 - use_null_aware_elements
+
+7 issues found. (ran in 6.9s)

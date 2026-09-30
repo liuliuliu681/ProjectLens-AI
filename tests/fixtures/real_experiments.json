@@ -1,0 +1,24 @@
+{
+  "experiments": [
+    {
+      "experiment": "B0_rgb_baseline",
+      "split": "test",
+      "seed": 42,
+      "mask_precision": 0.9516239026917155,
+      "mask_recall": 0.42,
+      "mask_f1": 0.5827866346542556,
+      "mask_map50": 0.5401886384256683,
+      "mask_map50_95": 0.4967934874416896
+    },
+    {
+      "experiment": "C1_rgbd_dual_p3p4",
+      "split": "test",
+      "seed": 42,
+      "mask_precision": 0.6149572538640099,
+      "mask_recall": 0.5909090909090909,
+      "mask_f1": 0.6026933804129154,
+      "mask_map50": 0.6000020750308102,
+      "mask_map50_95": 0.5266984232856768
+    }
+  ]
+}

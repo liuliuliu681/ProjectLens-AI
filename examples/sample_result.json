@@ -1,0 +1,6 @@
+{
+  "experiments": [
+    {"experiment": "baseline_demo", "split": "test", "seed": 1, "mask_precision": 0.80, "mask_recall": 0.60, "mask_f1": 0.69, "mask_map50": 0.62, "mask_map50_95": 0.45},
+    {"experiment": "current_demo", "split": "test", "seed": 1, "mask_precision": 0.82, "mask_recall": 0.66, "mask_f1": 0.73, "mask_map50": 0.67, "mask_map50_95": 0.49}
+  ]
+}
