@@ -54,6 +54,8 @@ streamlit run app.py
 
 MVP 使用确定性格式解析。无法可靠识别时显示 `unrecognized`，不会让 AI 猜任意文件结构。单文件上限 10 MB，一次最多 10 个文件；上传文件仅在当前页面会话中处理。
 
+实验解析支持标准记录、明确字段的 YOLO segmentation summary、多随机种子原始 summary，以及模型 × 阈值的 sweep 表。总体 mask、box 和类别 mask 指标分口径保存；sweep 只有 Precision / Recall / F1，不补造 mAP。实例诊断 summary 会被识别，但其诊断 recall 不会冒充标准模型指标。
+
 ## Testing
 
 ```powershell
@@ -61,7 +63,7 @@ pip install -r requirements-dev.txt
 pytest -ra
 ```
 
-当前运行 `pytest -ra`：151 passed、0 failed、0 skipped、0 warnings。测试覆盖 File Loader、Experiment Parser、Metric Normalizer、Calculator、Software Parser、Flutter、Godot、LLM Client mock 与 retry、Prompt Builder、Response Validator、Markdown / HTML Renderer、Config、UI helper、路径和真实 fixtures。真实 API 可用 `python -m scripts.smoke_test_llm` 单独检查；普通 pytest 不调用真实 API。
+当前运行 `pytest -ra`：160 passed、0 failed、0 skipped、0 warnings。测试覆盖 File Loader、Experiment Parser、Metric Normalizer、Calculator、Software Parser、Flutter、Godot、LLM Client mock 与 retry、Prompt Builder、Response Validator、Markdown / HTML Renderer、Config、UI helper、路径和真实 fixtures。真实 API 可用 `python -m scripts.smoke_test_llm` 单独检查；普通 pytest 不调用真实 API。
 
 ## Real-world Validation
 

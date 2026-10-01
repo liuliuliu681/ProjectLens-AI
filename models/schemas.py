@@ -28,6 +28,7 @@ class ExperimentRun(BaseModel):
     name: str = Field(min_length=1)
     split: str | None = None
     seed: int | None = None
+    metric_scope: Literal["generic", "mask", "box", "mask_bone_spike", "mask_rib", "threshold_sweep"] = "generic"
     metrics: MetricSet
 
 
@@ -53,7 +54,9 @@ class ParseResult(BaseModel):
     """Parser outcome with actionable diagnostics."""
 
     status: Literal["success", "partial", "unrecognized"]
+    profile: str | None = None
     experiments: list[ExperimentRun] = Field(default_factory=list)
+    infos: list[str] = Field(default_factory=list)
     warnings: list[str] = Field(default_factory=list)
     errors: list[str] = Field(default_factory=list)
 

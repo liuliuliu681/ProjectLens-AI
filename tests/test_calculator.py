@@ -42,3 +42,13 @@ def test_non_ratio_has_no_percentage_points():
     assert delta.absolute_delta == pytest.approx(-1)
     assert delta.percentage_points is None
     assert delta.relative_percent == pytest.approx(-50)
+
+
+def test_comparison_rejects_mixed_metric_scopes_and_splits():
+    mask = ExperimentRun(name="A", split="val", metric_scope="mask", metrics=MetricSet(recall=0.5))
+    box = ExperimentRun(name="B", split="val", metric_scope="box", metrics=MetricSet(recall=0.6))
+    test_mask = ExperimentRun(name="C", split="test", metric_scope="mask", metrics=MetricSet(recall=0.7))
+    with pytest.raises(ValueError, match="指标口径"):
+        compare_experiments(mask, box)
+    with pytest.raises(ValueError, match="split"):
+        compare_experiments(mask, test_mask)

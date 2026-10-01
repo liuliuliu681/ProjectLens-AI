@@ -11,6 +11,11 @@ def compare_experiments(
 ) -> ExperimentComparison:
     """Compare shared metrics; relative change is undefined for a zero baseline."""
 
+    if baseline.metric_scope != current.metric_scope:
+        raise ValueError("不能比较不同指标口径的实验")
+    if baseline.split != current.split:
+        raise ValueError("不能比较不同 split 的实验")
+
     deltas: dict[str, MetricDelta] = {}
     for metric_name in MetricSet.model_fields:
         baseline_value = getattr(baseline.metrics, metric_name)

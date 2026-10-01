@@ -39,7 +39,8 @@ def _section(title: str, items: list[str]) -> str:
 def _research_facts(comparison: ExperimentComparison) -> str:
     lines = [
         "## 数据结果", "",
-        f"Baseline：{comparison.baseline.name}；Current：{comparison.current.name}", "",
+        f"Baseline：{comparison.baseline.name}；Current：{comparison.current.name}",
+        f"指标口径：{comparison.baseline.metric_scope}；数据划分：{comparison.baseline.split or '未提供'}", "",
         "| 指标 | Baseline | Current | 变化 |",
         "| --- | ---: | ---: | ---: |",
     ]
@@ -102,7 +103,7 @@ def _short_facts(structured_facts: StructuredFacts) -> str:
         for name, delta in structured_facts.deltas.items():
             change = _points(delta.percentage_points) if delta.percentage_points is not None else _plain(delta.absolute_delta, signed=True)
             details.append(f"{METRIC_LABELS.get(name, name)} {change}")
-        return "已验证数据：" + "；".join(details)
+        return f"已验证数据：指标口径 {structured_facts.baseline.metric_scope}；" + "；".join(details)
     analyses = [structured_facts] if isinstance(structured_facts, SoftwareAnalysis) else structured_facts
     details = []
     for analysis in analyses:

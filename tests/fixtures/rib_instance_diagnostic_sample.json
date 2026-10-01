@@ -1,0 +1,34 @@
+{
+  "experiment": "rib_instance_diagnostic_C1_C2_C21",
+  "split": "valid",
+  "diagnostic_thresholds": {
+    "prediction_keep_conf": 0.001,
+    "formal_conf": 0.25,
+    "mask_iou_tp": 0.5,
+    "weak_localization_iou": 0.1
+  },
+  "model_summaries": {
+    "C1": {
+      "model": "C1",
+      "split": "val",
+      "gt_rib_instances": 10,
+      "tp_conf25_iou50": 0,
+      "diagnostic_recall_conf25_iou50": 0.0
+    },
+    "C2": {
+      "model": "C2",
+      "split": "val",
+      "gt_rib_instances": 10,
+      "tp_conf25_iou50": 1,
+      "diagnostic_recall_conf25_iou50": 0.1
+    },
+    "C21": {
+      "model": "C21",
+      "split": "val",
+      "gt_rib_instances": 10,
+      "tp_conf25_iou50": 1,
+      "diagnostic_recall_conf25_iou50": 0.1
+    }
+  },
+  "instance_rows": []
+}

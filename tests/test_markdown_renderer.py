@@ -60,6 +60,14 @@ def test_research_decline_uses_signed_percentage_points():
     assert "-5.12 pp" in markdown
 
 
+def test_report_labels_scoped_metrics_and_split():
+    baseline = ExperimentRun(name="C1", split="val", metric_scope="mask_rib", metrics=MetricSet(recall=0.1))
+    current = ExperimentRun(name="C2", split="val", metric_scope="mask_rib", metrics=MetricSet(recall=0.2))
+    facts = compare_experiments(baseline, current)
+    assert "指标口径：mask_rib；数据划分：val" in render_markdown("research", facts, draft())
+    assert "指标口径 mask_rib" in render_markdown("short", facts, draft(summary="本轮取得进展。"))
+
+
 def test_mismatched_fact_type_is_rejected():
     analysis = SoftwareAnalysis(parse_status="success", framework="flutter")
     with pytest.raises(ValueError):

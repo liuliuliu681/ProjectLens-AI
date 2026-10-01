@@ -138,6 +138,8 @@ def _upload_facts(mode: str):
         if experiment:
             runs.extend((upload.name, run) for run in result.experiments)
             status, warnings = result.status, result.warnings + result.errors
+            for info in result.infos:
+                st.caption(f"{upload.name}：{info}")
         else:
             analyses.append((upload.name, result))
             status, warnings = result.parse_status, result.parse_warnings
@@ -145,7 +147,10 @@ def _upload_facts(mode: str):
             st.error(f"{upload.name}：无法可靠解析该文件。")
             acceptable = False
         elif status == "partial":
-            st.warning(f"{upload.name}：部分信息缺失或存在矛盾。")
+            message = ("已识别实例诊断文件，但没有可用于标准模型对比的完整指标。"
+                       if experiment and result.profile == "instance_diagnostic"
+                       else "部分信息缺失或存在矛盾。")
+            st.warning(f"{upload.name}：{message}")
             acceptable = False
         for warning in warnings:
             st.caption(f"{upload.name}：{warning}")
@@ -154,16 +159,42 @@ def _upload_facts(mode: str):
 
 def _select_comparison(runs):
     if runs:
-        st.write("识别到的实验：", "、".join(run.name for _, run in runs))
+        st.caption(f"已读取 {len(runs)} 个实验指标视图；不同指标口径分别展示。")
+        with st.expander("实验指标详情", expanded=len(runs) <= 8):
+            st.dataframe([
+                {"experiment": run.name, "scope": run.metric_scope, "split": run.split,
+                 "seed": run.seed, **run.metrics.model_dump()}
+                for _, run in runs
+            ], hide_index=True, width="stretch")
     if len(runs) < 2:
         return None
-    labels = [f"{run.name} · {filename} · #{index + 1}" for index, (filename, run) in enumerate(runs)]
-    baseline_index = st.selectbox("Baseline", range(len(runs)), format_func=lambda i: labels[i], key="baseline")
-    current_index = st.selectbox("Current", range(len(runs)), index=1, format_func=lambda i: labels[i], key="current")
+    compatible_pairs = [
+        (i, j) for i, (_, left) in enumerate(runs)
+        for j, (_, right) in enumerate(runs) if i < j
+        and left.metric_scope == right.metric_scope and left.split == right.split
+        and (left.name, left.seed) != (right.name, right.seed)
+    ]
+    if not compatible_pairs:
+        st.info("需要两组具有相同指标口径和 split 的实验才能对比。")
+        return None
+    labels = [f"{run.name} · {run.metric_scope} · {run.split or 'split 未提供'} · "
+              f"seed={run.seed if run.seed is not None else '未提供'} · {filename} · #{index + 1}"
+              for index, (filename, run) in enumerate(runs)]
+    baseline_index = st.selectbox("Baseline", range(len(runs)), index=compatible_pairs[0][0],
+                                  format_func=lambda i: labels[i], key="baseline")
+    current_index = st.selectbox("Current", range(len(runs)), index=compatible_pairs[0][1],
+                                 format_func=lambda i: labels[i], key="current")
     if baseline_index == current_index:
         st.warning("请选择两个不同的实验。")
         return None
-    comparison = compare_experiments(runs[baseline_index][1], runs[current_index][1])
+    baseline, current = runs[baseline_index][1], runs[current_index][1]
+    if baseline.metric_scope != current.metric_scope:
+        st.warning("请选择相同指标口径的两组实验；box、mask、类别 mask 和阈值扫描不能混比。")
+        return None
+    if baseline.split != current.split:
+        st.warning("两组实验的 split 不一致或未同时提供，不能直接比较。")
+        return None
+    comparison = compare_experiments(baseline, current)
     st.dataframe(comparison_rows(comparison), hide_index=True, width="stretch")
     return comparison
 

@@ -7,22 +7,19 @@ from typing import Any
 import pandas as pd
 from pydantic import ValidationError
 
+from core.experiment_profiles import (
+    KNOWN_METADATA, REQUIRED_METRICS, SCOPED_ALIASES, STANDARD_ALIASES,
+    SWEEP_COLUMNS, identify_profile,
+)
 from core.file_loader import FileLoadError, load_file
 from models.schemas import ExperimentRun, MetricSet, ParseResult
 
 
-ALIASES: dict[str, str] = {
-    "precision": "precision", "Precision": "precision", "P": "precision",
-    "recall": "recall", "Recall": "recall", "R": "recall",
-    "f1": "f1", "F1": "f1", "f1_score": "f1",
-    "map50": "map50", "mAP50": "map50", "mAP_50": "map50",
-    "map50_95": "map50_95", "mAP50-95": "map50_95",
-    "mAP50_95": "map50_95", "mAP50:95": "map50_95",
-    "loss": "loss", "parameters": "parameters", "gflops": "gflops",
-    "mask_precision": "precision", "mask_recall": "recall", "mask_f1": "f1",
-    "mask_map50": "map50", "mask_map50_95": "map50_95",
-}
-RATIO_METRICS = ("precision", "recall", "f1", "map50", "map50_95")
+RATIO_METRICS = frozenset({"precision", "recall", "f1", "map50", "map50_95"})
+ALL_METRIC_FIELDS = frozenset(
+    field for aliases in (STANDARD_ALIASES, *SCOPED_ALIASES.values())
+    for names in aliases.values() for field in names
+)
 
 
 def normalize_ratio(value: Any) -> float:
@@ -74,82 +71,156 @@ def _records(data: Any) -> list[dict[str, Any]]:
     raise ValueError("JSON 顶层必须是实验对象、实验对象列表或 experiments 列表")
 
 
-def parse_experiments(data: Any) -> ParseResult:
-    """Parse loaded data into experiment runs and diagnostic status."""
+def _sweep_records(data: Any) -> list[dict[str, Any]]:
+    rows = data.to_dict(orient="records") if isinstance(data, pd.DataFrame) else data.get("all_rows")
+    if not isinstance(rows, list):
+        raise ValueError("阈值扫描的 all_rows 必须是列表")
+    split = data.get("split") if isinstance(data, dict) else None
+    records = []
+    for index, row in enumerate(rows, start=1):
+        if not isinstance(row, dict) or not SWEEP_COLUMNS <= row.keys():
+            raise ValueError(f"阈值扫描第 {index} 行缺少明确字段")
+        model, threshold = row["model"], row["threshold"]
+        try:
+            numeric_threshold = float(threshold)
+        except (TypeError, ValueError) as exc:
+            raise ValueError(f"阈值扫描第 {index} 行的 threshold 无效") from exc
+        if not isinstance(model, str) or not model.strip() or not math.isfinite(numeric_threshold) or not 0 <= numeric_threshold <= 1:
+            raise ValueError(f"阈值扫描第 {index} 行的 model 或 threshold 无效")
+        records.append({
+            "name": f"{model.strip()} @ threshold={str(threshold).strip()}",
+            "split": split,
+            "metrics": {metric: row[metric] for metric in REQUIRED_METRICS["threshold_sweep"]},
+        })
+    return records
 
+
+def _metric_values(fields: dict[str, Any], aliases: dict[str, tuple[str, ...]], label: str,
+                   warnings: list[str]) -> tuple[dict[str, float], bool]:
+    values = {}
+    incomplete = False
+    for metric, source_names in aliases.items():
+        present = [name for name in source_names if name in fields and not _is_missing(fields[name])]
+        if len(present) > 1:
+            warnings.append(f"{label}: 重复指标 {metric}（{', '.join(present)}），按明确别名优先级使用 {present[0]}")
+            incomplete = True
+        if not present:
+            continue
+        try:
+            values[metric] = (normalize_ratio(fields[present[0]]) if metric in RATIO_METRICS
+                              else _normalize_non_ratio(fields[present[0]]))
+        except ValueError as exc:
+            warnings.append(f"{label} 的 {present[0]}: {exc}")
+            incomplete = True
+    return values, incomplete
+
+
+def _parse_record(record: Any, index: int, profile: str, warnings: list[str],
+                  errors: list[str], infos: list[str]) -> tuple[list[ExperimentRun], bool]:
+    label = f"第 {index} 条实验"
+    if not isinstance(record, dict):
+        errors.append(f"{label}: 必须是对象")
+        return [], True
+    name = record.get("name", record.get("experiment"))
+    if not isinstance(name, str) or not name.strip():
+        errors.append(f"{label}: 缺少有效的 name 或 experiment")
+        return [], True
+    name = name.strip()
+    nested = record.get("metrics")
+    if nested is not None and not isinstance(nested, dict):
+        errors.append(f"{label} ({name}): metrics 必须是对象")
+        return [], True
+    fields = {key: value for key, value in record.items()
+              if key not in {"name", "experiment", "split", "seed", "metrics"}}
+    if nested:
+        fields.update(nested)
+
+    ignored = [key for key in fields if key in KNOWN_METADATA]
+    if ignored:
+        infos.append(f"{label} ({name}): 忽略 {len(ignored)} 个已知配置字段")
+    unknown = [key for key, value in fields.items()
+               if key not in ALL_METRIC_FIELDS and key not in KNOWN_METADATA
+               and (isinstance(value, (int, float)) or key.startswith(("mask_", "box_")))]
+    if unknown:
+        warnings.append(f"{label} ({name}): 未识别的数值或指标字段 {', '.join(unknown)}")
+
+    if profile == "threshold_sweep":
+        scopes = ("threshold_sweep",)
+    else:
+        scopes = tuple(scope for scope, aliases in SCOPED_ALIASES.items()
+                       if any(field in fields for names in aliases.values() for field in names))
+        if any(field in fields for names in STANDARD_ALIASES.values() for field in names):
+            scopes = ("generic", *scopes)
+        if not scopes:
+            scopes = ("generic",)
+
+    runs = []
+    incomplete = False
+    for scope in scopes:
+        aliases = STANDARD_ALIASES if scope in {"generic", "threshold_sweep"} else SCOPED_ALIASES[scope]
+        scope_label = f"{label} ({name}, {scope})"
+        values, invalid = _metric_values(fields, aliases, scope_label, warnings)
+        missing = [metric for metric in REQUIRED_METRICS[scope] if metric not in values]
+        if missing:
+            warnings.append(f"{scope_label}: 缺失指标 {', '.join(missing)}")
+        incomplete |= invalid or bool(missing)
+        try:
+            runs.append(ExperimentRun(name=name, split=record.get("split"), seed=record.get("seed"),
+                                      metric_scope=scope, metrics=MetricSet(**values)))
+        except ValidationError as exc:
+            errors.append(f"{scope_label}: 实验元数据无效: {exc}")
+            incomplete = True
+    return runs, incomplete
+
+
+def parse_experiments(data: Any) -> ParseResult:
+    """Parse loaded data into scoped experiment runs and diagnostic status."""
+
+    profile = identify_profile(data)
+    if profile == "instance_diagnostic":
+        summaries = data["model_summaries"]
+        if not isinstance(summaries, dict):
+            return ParseResult(status="unrecognized", profile=profile, errors=["model_summaries 必须是对象"])
+        return ParseResult(
+            status="partial", profile=profile,
+            infos=[f"已识别实例诊断文件：{len(summaries)} 个模型"],
+            warnings=["当前没有可用于标准模型对比的完整 P/R/F1/mAP 指标；诊断 recall 未映射为标准 recall"],
+        )
     try:
-        records = _records(data)
+        if profile == "threshold_sweep":
+            records = _sweep_records(data)
+        elif profile == "multiseed_summary":
+            records = list(data["raw_summaries"].values())
+        else:
+            records = _records(data)
     except ValueError as exc:
-        return ParseResult(status="unrecognized", errors=[str(exc)])
+        return ParseResult(status="unrecognized", profile=profile, errors=[str(exc)])
     if not records:
-        return ParseResult(status="unrecognized", errors=["没有实验数据行"])
+        return ParseResult(status="unrecognized", profile=profile, errors=["没有实验数据行"])
 
     runs: list[ExperimentRun] = []
     warnings: list[str] = []
     errors: list[str] = []
-    incomplete = False
+    infos: list[str] = []
+    if profile == "threshold_sweep":
+        infos.append(f"已识别阈值扫描：{len(records)} 个模型阈值点；仅含 Precision、Recall、F1，无 mAP")
+        source_rows = data.to_dict(orient="records") if isinstance(data, pd.DataFrame) else data["all_rows"]
+        extra_columns = set().union(*(row.keys() for row in source_rows)) - SWEEP_COLUMNS
+        if extra_columns:
+            warnings.append(f"阈值扫描存在未支持字段: {', '.join(sorted(extra_columns))}")
+    elif profile == "yolo_segmentation":
+        infos.append("已识别 YOLO segmentation summary；mask、box 与类别 mask 指标分别保存")
+    elif profile == "multiseed_summary":
+        infos.append(f"已识别多随机种子 summary：{len(records)} 个原始实验")
+    incomplete = bool(warnings)
     for index, record in enumerate(records, start=1):
-        label = f"第 {index} 条实验"
-        if not isinstance(record, dict):
-            errors.append(f"{label}: 必须是对象")
-            continue
-        name = record.get("name", record.get("experiment"))
-        if not isinstance(name, str) or not name.strip():
-            errors.append(f"{label}: 缺少有效的 name 或 experiment")
-            continue
-        name = name.strip()
-        nested = record.get("metrics")
-        if nested is not None and not isinstance(nested, dict):
-            errors.append(f"{label} ({name}): metrics 必须是对象")
-            continue
-        fields = {
-            key: value for key, value in record.items()
-            if key not in {"name", "experiment", "split", "seed", "metrics"}
-        }
-        if nested is not None:
-            fields.update(nested)
-        values: dict[str, float] = {}
-        seen: set[str] = set()
-        for source_name, raw_value in fields.items():
-            metric_name = ALIASES.get(source_name)
-            if metric_name is None:
-                warnings.append(f"{label} ({name}): 未识别字段 {source_name!r}")
-                continue
-            if metric_name in seen:
-                warnings.append(f"{label} ({name}): 重复指标 {metric_name}，保留第一个值")
-                incomplete = True
-                continue
-            seen.add(metric_name)
-            if _is_missing(raw_value):
-                continue
-            try:
-                values[metric_name] = (
-                    normalize_ratio(raw_value) if metric_name in RATIO_METRICS
-                    else _normalize_non_ratio(raw_value)
-                )
-            except ValueError as exc:
-                warnings.append(f"{label} ({name}) 的 {source_name}: {exc}")
-                incomplete = True
-        missing = [metric for metric in RATIO_METRICS if metric not in values]
-        if missing:
-            warnings.append(f"{label} ({name}): 缺失指标 {', '.join(missing)}")
-            incomplete = True
-        try:
-            runs.append(ExperimentRun(
-                name=name,
-                split=record.get("split"),
-                seed=record.get("seed"),
-                metrics=MetricSet(**values),
-            ))
-        except ValidationError as exc:
-            errors.append(f"{label} ({name}): 实验元数据无效: {exc}")
-
+        parsed, partial = _parse_record(record, index, profile, warnings, errors, infos)
+        runs.extend(parsed)
+        incomplete |= partial
     if not runs:
-        return ParseResult(status="unrecognized", warnings=warnings, errors=errors)
-    return ParseResult(
-        status="partial" if incomplete or errors else "success",
-        experiments=runs, warnings=warnings, errors=errors,
-    )
+        return ParseResult(status="unrecognized", profile=profile, infos=infos, warnings=warnings, errors=errors)
+    return ParseResult(status="partial" if incomplete or errors else "success", profile=profile,
+                       experiments=runs, infos=infos, warnings=warnings, errors=errors)
 
 
 def parse_file(path: str | Path) -> ParseResult:
