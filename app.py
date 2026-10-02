@@ -19,12 +19,14 @@ from core.markdown_renderer import render_markdown
 from core.html_renderer import render_html
 from core.prompt_builder import PromptBuilder
 from core.response_validator import ReportValidationError, validate_report_draft
+from core.response_validator import validate_experiment_draft_numbers, validate_single_experiment_draft
 from core.test_parser import parse_test_file
 from core.ui_helpers import (
     EXPERIMENT_SUFFIXES, SOFTWARE_SUFFIXES, analysis_result,
     build_download_filename, comparison_rows, validate_upload,
+    experiment_reportable, group_experiments, report_disabled_reason,
 )
-from models.schemas import ProjectFacts
+from models.schemas import ExperimentFacts, ProjectFacts
 
 
 MODES = ("模型实验分析", "软件测试分析", "项目阶段总结")
@@ -121,11 +123,13 @@ def _upload_facts(mode: str):
                                           accept_multiple_files=True, key=f"software_{mode}") or []
     if len(experiment_files) + len(software_files) > 10:
         st.error("最多上传 10 个文件，请减少文件数量。")
-        return [], [], False, ""
+        return [], [], False, "", [], False
     fingerprint = hashlib.sha256()
     runs = []
     analyses = []
     acceptable = True
+    limitations = []
+    diagnostic = False
     for upload, experiment in [(item, True) for item in experiment_files] + [(item, False) for item in software_files]:
         fingerprint.update(upload.name.encode("utf-8"))
         fingerprint.update(upload.getvalue())
@@ -140,6 +144,8 @@ def _upload_facts(mode: str):
             status, warnings = result.status, result.warnings + result.errors
             for info in result.infos:
                 st.caption(f"{upload.name}：{info}")
+            if result.profile == "instance_diagnostic":
+                diagnostic = True
         else:
             analyses.append((upload.name, result))
             status, warnings = result.parse_status, result.parse_warnings
@@ -151,21 +157,16 @@ def _upload_facts(mode: str):
                        if experiment and result.profile == "instance_diagnostic"
                        else "部分信息缺失或存在矛盾。")
             st.warning(f"{upload.name}：{message}")
-            acceptable = False
+            if not experiment or not experiment_reportable(result):
+                acceptable = False
+            else:
+                limitations.extend(f"{upload.name}：{warning}" for warning in warnings)
         for warning in warnings:
             st.caption(f"{upload.name}：{warning}")
-    return runs, analyses, acceptable, fingerprint.hexdigest()
+    return runs, analyses, acceptable, fingerprint.hexdigest(), limitations, diagnostic
 
 
 def _select_comparison(runs):
-    if runs:
-        st.caption(f"已读取 {len(runs)} 个实验指标视图；不同指标口径分别展示。")
-        with st.expander("实验指标详情", expanded=len(runs) <= 8):
-            st.dataframe([
-                {"experiment": run.name, "scope": run.metric_scope, "split": run.split,
-                 "seed": run.seed, **run.metrics.model_dump()}
-                for _, run in runs
-            ], hide_index=True, width="stretch")
     if len(runs) < 2:
         return None
     compatible_pairs = [
@@ -199,6 +200,24 @@ def _select_comparison(runs):
     return comparison
 
 
+def _select_experiment(groups: list[ExperimentFacts]) -> ExperimentFacts | None:
+    if not groups:
+        return None
+    labels = []
+    for facts in groups:
+        if facts.profile == "threshold_sweep":
+            labels.append(f"阈值扫描 · {len(facts.experiments)} 个阈值点")
+        else:
+            first = facts.experiments[0]
+            labels.append(f"{first.name} · split={first.split or '未提供'} · "
+                          f"seed={first.seed if first.seed is not None else '未提供'}")
+    index = st.selectbox("选择实验", range(len(groups)), format_func=lambda i: labels[i], key="single_experiment")
+    selected = groups[index]
+    if selected.profile == "single":
+        st.caption("指标口径：" + "、".join(run.metric_scope for run in selected.experiments))
+    return selected
+
+
 def _show_analyses(analyses):
     for filename, analysis in analyses:
         st.markdown(f"**{filename}**")
@@ -216,10 +235,27 @@ def main() -> None:
     saved = _config_panel()
     mode = st.radio("分析模式", MODES, horizontal=True, key="mode")
     st.session_state["current_mode"] = mode
-    runs, named_analyses, acceptable, file_signature = _upload_facts(mode)
+    runs, named_analyses, acceptable, file_signature, limitations, diagnostic = _upload_facts(mode)
 
     st.subheader("Step 2 · 查看 Python 解析结果")
-    comparison = _select_comparison(runs) if runs else None
+    groups = group_experiments([run for _, run in runs], limitations)
+    comparison = None
+    selected_experiment = None
+    comparison_mode = False
+    if runs:
+        st.caption(f"已读取 {len(groups)} 个逻辑实验；不同指标口径分别展示。")
+        with st.expander("实验指标详情", expanded=len(runs) <= 8):
+            st.dataframe([{"experiment": run.name, "scope": run.metric_scope,
+                           "split": run.split, "seed": run.seed, **run.metrics.model_dump()}
+                          for _, run in runs], hide_index=True, width="stretch")
+        analysis_mode = (st.radio("分析方式", ("单实验分析", "Baseline / Current 对比"),
+                                  horizontal=True, key="experiment_analysis_mode")
+                         if len(groups) >= 2 else "单实验分析")
+        comparison_mode = analysis_mode == "Baseline / Current 对比"
+        if comparison_mode:
+            comparison = _select_comparison(runs)
+        else:
+            selected_experiment = _select_experiment(groups)
     _show_analyses(named_analyses)
     analyses = [analysis for _, analysis in named_analyses]
     st.session_state["parsed_facts"] = {"experiments": [run for _, run in runs], "software": analyses}
@@ -234,19 +270,20 @@ def main() -> None:
 
     facts = None
     if mode == MODES[0]:
-        facts = ProjectFacts(comparison=comparison) if comparison and report_type == "engineering" else comparison
+        selected_facts = comparison if comparison_mode else selected_experiment
+        facts = ProjectFacts(comparison=comparison, experiments=[selected_experiment] if selected_experiment else []) if selected_facts and report_type == "engineering" else selected_facts
     elif mode == MODES[1] and analyses:
         facts = analyses
-    elif mode == MODES[2] and (comparison or analyses):
-        facts = ProjectFacts(comparison=comparison, software=analyses)
-    if report_type == "research" and comparison is None:
-        st.info("科研汇报需要先选择两组实验。")
+    elif mode == MODES[2] and (comparison or selected_experiment or analyses):
+        facts = ProjectFacts(comparison=comparison, experiments=[selected_experiment] if selected_experiment else [], software=analyses)
+    if report_type == "research" and comparison is None and selected_experiment is None:
         facts = None
     if not acceptable:
         facts = None
     if any(analysis.parse_status == "unrecognized" for analysis in analyses):
         facts = None
     signature = (mode, file_signature, comparison.model_dump_json() if comparison else None,
+                 selected_experiment.model_dump_json() if selected_experiment else None,
                  notes, report_type)
     if st.session_state.get("report_signature") != signature:
         st.session_state["report"] = None
@@ -257,14 +294,20 @@ def main() -> None:
         configured = True
     except ValueError:
         configured = False
-    if not configured:
-        st.info("请先在左侧完成有效的模型配置。")
-    if st.button("生成 AI 报告", disabled=facts is None or not configured, type="primary"):
+    reason = report_disabled_reason(facts, configured, has_upload=bool(runs or analyses),
+                                    diagnostic=diagnostic, comparison_mode=comparison_mode)
+    if reason:
+        st.info(reason)
+    if st.button("生成 AI 报告", disabled=reason is not None, type="primary"):
         try:
             with st.spinner("正在生成报告..."):
                 system_prompt, user_prompt = PromptBuilder().build(report_type, facts, notes)
                 raw = LLMClient(**config.__dict__).generate(system_prompt, user_prompt)
                 draft = validate_report_draft(raw)
+                if selected_experiment is not None and selected_experiment.profile == "single" and comparison is None:
+                    validate_single_experiment_draft(draft)
+                elif selected_experiment is not None and comparison is None:
+                    validate_experiment_draft_numbers(draft)
                 report = render_markdown(report_type, facts, draft)
         except (LLMClientError, ReportValidationError, ValueError) as exc:
             LOGGER.warning("Report generation failed: %s", type(exc).__name__)

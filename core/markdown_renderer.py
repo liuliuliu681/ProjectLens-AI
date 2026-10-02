@@ -1,7 +1,8 @@
 """Assemble reports with deterministic facts and validated LLM prose."""
 
 from core.prompt_builder import ReportType, StructuredFacts
-from models.schemas import ExperimentComparison, MetricDelta, ProjectFacts, ReportDraft, SoftwareAnalysis
+from core.response_validator import validate_experiment_draft_numbers, validate_single_experiment_draft
+from models.schemas import ExperimentComparison, ExperimentFacts, MetricDelta, ProjectFacts, ReportDraft, SoftwareAnalysis
 
 
 METRIC_LABELS = {
@@ -49,6 +50,35 @@ def _research_facts(comparison: ExperimentComparison) -> str:
     return "\n".join(lines)
 
 
+SCOPE_LABELS = {
+    "mask": "Mask", "box": "Box", "mask_bone_spike": "Bone Spike Mask",
+    "mask_rib": "Rib Mask", "generic": "通用指标",
+}
+
+
+def _single_facts(facts: ExperimentFacts) -> str:
+    if facts.profile == "threshold_sweep":
+        lines = ["## 阈值扫描结果", "", "指标口径：threshold_sweep；仅包含 Precision、Recall、F1", "",
+                 "| 模型与阈值 | Precision | Recall | F1 |", "| --- | ---: | ---: | ---: |"]
+        for run in facts.experiments:
+            values = [getattr(run.metrics, key) for key in ("precision", "recall", "f1")]
+            lines.append("| " + " | ".join([run.name, *(_percent(v) if v is not None else "未提供" for v in values)]) + " |")
+    else:
+        first = facts.experiments[0]
+        lines = ["## 数据结果", "", f"实验：{first.name}", f"Split：{first.split or '未提供'}",
+                 f"Seed：{first.seed if first.seed is not None else '未提供'}"]
+        for run in facts.experiments:
+            lines.extend(["", f"### {SCOPE_LABELS.get(run.metric_scope, run.metric_scope)}", "",
+                          "| 指标 | 结果 |", "| --- | ---: |"])
+            for name, value in run.metrics.model_dump().items():
+                if value is not None:
+                    rendered = _percent(value) if name in {"precision", "recall", "f1", "map50", "map50_95"} else _plain(value)
+                    lines.append(f"| {METRIC_LABELS.get(name, name)} | {rendered} |")
+    if facts.limitations:
+        lines.extend(["", "### 数据局限", "", *(f"- {_one_line(item)}" for item in facts.limitations)])
+    return "\n".join(lines)
+
+
 def _metric_row(name: str, delta: MetricDelta) -> str:
     label = METRIC_LABELS.get(name, name)
     if delta.percentage_points is not None:
@@ -93,6 +123,8 @@ def _engineering_facts(analyses: list[SoftwareAnalysis]) -> str:
 def _short_facts(structured_facts: StructuredFacts) -> str:
     if isinstance(structured_facts, ProjectFacts):
         parts = []
+        for experiment in structured_facts.experiments:
+            parts.append(_short_facts(experiment).removeprefix("已验证数据："))
         if structured_facts.comparison is not None:
             parts.append(_short_facts(structured_facts.comparison).removeprefix("已验证数据："))
         if structured_facts.software:
@@ -104,6 +136,15 @@ def _short_facts(structured_facts: StructuredFacts) -> str:
             change = _points(delta.percentage_points) if delta.percentage_points is not None else _plain(delta.absolute_delta, signed=True)
             details.append(f"{METRIC_LABELS.get(name, name)} {change}")
         return f"已验证数据：指标口径 {structured_facts.baseline.metric_scope}；" + "；".join(details)
+    if isinstance(structured_facts, ExperimentFacts):
+        if structured_facts.profile == "threshold_sweep":
+            return (f"已验证数据：阈值扫描 {len(structured_facts.experiments)} 个阈值点；"
+                    "指标口径 Precision / Recall / F1；mAP 未提供")
+        first = structured_facts.experiments[0]
+        scopes = "、".join(run.metric_scope for run in structured_facts.experiments)
+        return (f"已验证数据：实验 {first.name}；split={first.split or '未提供'}；"
+                f"seed={first.seed if first.seed is not None else '未提供'}；"
+                f"指标口径 {scopes}")
     analyses = [structured_facts] if isinstance(structured_facts, SoftwareAnalysis) else structured_facts
     details = []
     for analysis in analyses:
@@ -122,16 +163,31 @@ def render_markdown(
 
     if not isinstance(draft, ReportDraft):
         raise TypeError("draft 必须是已验证的 ReportDraft")
+    if (isinstance(structured_facts, ExperimentFacts) and structured_facts.profile == "single") or (
+        isinstance(structured_facts, ProjectFacts) and any(
+            item.profile == "single" for item in structured_facts.experiments)
+        and structured_facts.comparison is None
+    ):
+        validate_single_experiment_draft(draft)
+    elif isinstance(structured_facts, ExperimentFacts) or (
+        isinstance(structured_facts, ProjectFacts) and structured_facts.experiments
+        and structured_facts.comparison is None
+    ):
+        validate_experiment_draft_numbers(draft)
     if isinstance(structured_facts, ProjectFacts):
-        if structured_facts.comparison is None and not structured_facts.software:
+        if structured_facts.comparison is None and not structured_facts.experiments and not structured_facts.software:
             raise ValueError("项目总结至少需要一项已验证事实")
         fact_sections = []
         if structured_facts.comparison is not None:
             fact_sections.append(_research_facts(structured_facts.comparison))
+        fact_sections.extend(_single_facts(item) for item in structured_facts.experiments)
         if structured_facts.software:
             fact_sections.append(_engineering_facts(structured_facts.software))
         facts = "\n\n".join(fact_sections)
-        research = structured_facts.comparison is not None
+        research = structured_facts.comparison is not None or bool(structured_facts.experiments)
+    elif isinstance(structured_facts, ExperimentFacts):
+        facts = _single_facts(structured_facts)
+        research = True
     elif isinstance(structured_facts, ExperimentComparison):
         facts = _research_facts(structured_facts)
         research = True
@@ -148,7 +204,7 @@ def render_markdown(
 
     if report_type == "research":
         if not research:
-            raise ValueError("科研报告需要 ExperimentComparison")
+            raise ValueError("科研报告需要实验事实")
         sections = [
             "# 阶段实验报告", facts,
             _section("本轮进展", draft.progress),

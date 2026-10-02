@@ -2,7 +2,7 @@
 
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 
 class MetricSet(BaseModel):
@@ -48,6 +48,27 @@ class ExperimentComparison(BaseModel):
     baseline: ExperimentRun
     current: ExperimentRun
     deltas: dict[str, MetricDelta]
+
+
+class ExperimentFacts(BaseModel):
+    """One logical experiment, or the measured points of a threshold sweep."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    profile: Literal["single", "threshold_sweep"] = "single"
+    experiments: list[ExperimentRun] = Field(min_length=1)
+    limitations: list[str] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def consistent_identity(self):
+        if self.profile == "single":
+            identities = {(run.name, run.split, run.seed) for run in self.experiments}
+            scopes = [run.metric_scope for run in self.experiments]
+            if len(identities) != 1 or len(scopes) != len(set(scopes)) or "threshold_sweep" in scopes:
+                raise ValueError("单实验必须有相同的 name/split/seed 且指标口径不重复")
+        elif any(run.metric_scope != "threshold_sweep" for run in self.experiments):
+            raise ValueError("阈值扫描只接受 threshold_sweep 指标口径")
+        return self
 
 
 class ParseResult(BaseModel):
@@ -106,6 +127,7 @@ class ProjectFacts(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
+    experiments: list[ExperimentFacts] = Field(default_factory=list)
     comparison: ExperimentComparison | None = None
     software: list[SoftwareAnalysis] = Field(default_factory=list)
 

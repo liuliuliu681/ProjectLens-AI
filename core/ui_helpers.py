@@ -4,12 +4,55 @@ from datetime import datetime
 from pathlib import Path
 
 from core.markdown_renderer import METRIC_LABELS
-from models.schemas import ExperimentComparison, SoftwareAnalysis
+from models.schemas import ExperimentComparison, ExperimentFacts, ExperimentRun, ParseResult, SoftwareAnalysis
 
 
 EXPERIMENT_SUFFIXES = {".csv", ".json"}
 SOFTWARE_SUFFIXES = {".txt", ".log", ".md"}
 MAX_UPLOAD_BYTES = 10 * 1024 * 1024
+
+
+def experiment_reportable(result: ParseResult) -> bool:
+    """A partial parse is usable only when validated runs survive without record errors."""
+
+    return result.status in {"success", "partial"} and bool(result.experiments) and not result.errors
+
+
+def group_experiments(runs: list[ExperimentRun], limitations: list[str] | None = None) -> list[ExperimentFacts]:
+    """Group metric scopes by experiment identity; keep a sweep as one dataset."""
+
+    groups: dict[tuple[str, str | None, int | None], list[list[ExperimentRun]]] = {}
+    sweep = []
+    for run in runs:
+        if run.metric_scope == "threshold_sweep":
+            sweep.append(run)
+        else:
+            copies = groups.setdefault((run.name, run.split, run.seed), [[]])
+            target = next((copy for copy in copies if all(
+                existing.metric_scope != run.metric_scope for existing in copy)), None)
+            if target is None:
+                target = []
+                copies.append(target)
+            target.append(run)
+    facts = [ExperimentFacts(experiments=items, limitations=limitations or [])
+             for copies in groups.values() for items in copies]
+    if sweep:
+        facts.append(ExperimentFacts(profile="threshold_sweep", experiments=sweep,
+                                     limitations=limitations or []))
+    return facts
+
+
+def report_disabled_reason(facts: object, configured: bool, *, has_upload: bool,
+                           diagnostic: bool = False, comparison_mode: bool = False) -> str | None:
+    if diagnostic and facts is None:
+        return "当前诊断文件没有标准模型指标"
+    if not has_upload:
+        return "请先上传有效实验文件或测试日志"
+    if facts is None:
+        return "对比模式需要两个兼容实验" if comparison_mode else "请选择一个实验或有效分析数据"
+    if not configured:
+        return "请先配置 API"
+    return None
 
 
 def validate_upload(filename: str, size: int, allowed: set[str]) -> str:
