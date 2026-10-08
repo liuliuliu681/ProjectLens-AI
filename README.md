@@ -14,7 +14,8 @@ Python 负责解析、归一化、计算与验证；LLM 负责语义分析、总
 
 ## Features
 
-- CSV / JSON 实验解析；Baseline / Current 对比 Precision、Recall、F1、mAP 等指标。
+- 支持明确 schema 的实验 CSV / JSON；单实验 AI 报告与 Baseline / Current 对比，Precision、Recall、F1、mAP 等指标由 Python 渲染。
+- mask、box、类别 mask 等 scoped metrics 分开呈现；支持只有 Precision / Recall / F1 的 threshold sweep 总结。实例诊断文件仅限识别，不生成标准实验报告。
 - Flutter test、Flutter analyze、Godot test groups 和明确格式的测试总结解析；保留 test 与 test_group 口径，以及 passed、skipped、failed 的区别。
 - 科研报告、工程报告和约 100～300 中文字的简短总结；项目阶段总结可合并实验和软件事实。
 - OpenAI-compatible Chat Completions API；页面配置 API Key、Base URL、Model、Timeout，支持连接测试。
@@ -24,7 +25,7 @@ Python 负责解析、归一化、计算与验证；LLM 负责语义分析、总
 
 ### Windows 用户
 
-获取 `ProjectLensAI-v1.0.0-windows-x64.zip` 发布包，完整解压后双击 `ProjectLensAI/ProjectLensAI.exe`。默认浏览器会打开本机页面。在侧边栏填写自己的 API 配置并保存，然后上传文件使用。程序只绑定 `127.0.0.1`；首次运行的发布包不含 `.env`，也不含开发者 API Key。
+Windows onedir EXE 已完成本地构建，GitHub Release 尚未发布。获得发布包后，完整解压并双击 `ProjectLensAI/ProjectLensAI.exe`；程序会启动本机页面。在侧边栏填写自己的 API 配置并保存，然后上传文件使用。程序只绑定 `127.0.0.1`；发布包不应包含 `.env` 或开发者 API Key。
 
 ### 开发者
 
@@ -63,7 +64,7 @@ pip install -r requirements-dev.txt
 pytest -ra
 ```
 
-当前运行 `pytest -ra`：160 passed、0 failed、0 skipped、0 warnings。测试覆盖 File Loader、Experiment Parser、Metric Normalizer、Calculator、Software Parser、Flutter、Godot、LLM Client mock 与 retry、Prompt Builder、Response Validator、Markdown / HTML Renderer、Config、UI helper、路径和真实 fixtures。真实 API 可用 `python -m scripts.smoke_test_llm` 单独检查；普通 pytest 不调用真实 API。
+当前运行 `pytest -ra`：170 passed、0 failed、0 skipped、0 warnings。测试覆盖 File Loader、Experiment Parser、Metric Normalizer、Calculator、Software Parser、Flutter、Godot、LLM Client mock 与 retry、Prompt Builder、Response Validator、Markdown / HTML Renderer、Config、UI helper、路径和真实 fixtures。真实 API 可用 `python -m scripts.smoke_test_llm` 单独检查；普通 pytest 不调用真实 API。
 
 ## Real-world Validation
 
@@ -72,10 +73,6 @@ pytest -ra
 - Godot：51 test groups，51 passed，0 failed。统计单位是测试组。
 
 真实日志位于 `tests/fixtures/`。日志中的本机临时路径已脱敏。
-
-## Screenshots
-
-`docs/images/` 已预留截图目录，计划从真实运行页面采集 `01_home.png`、`02_experiment.png`、`03_software_test.png`、`04_ai_report.png`、`05_api_config.png`。当前尚未保存这些截图；不会用模拟图代替。
 
 ## Project Structure
 
@@ -88,7 +85,6 @@ models/schemas.py         Pydantic 数据模型
 prompts/                  三种报告模板
 examples/                 可公开的示例输入
 tests/                    自动化测试及真实脱敏 fixtures
-docs/images/              真实页面截图
 scripts/smoke_test_llm.py 真实 API 链路检查
 requirements.txt          运行依赖
 requirements-dev.txt      测试和打包依赖
@@ -100,8 +96,10 @@ ProjectLens deliberately separates deterministic computation from semantic analy
 
 ## Limitations
 
-- 只支持明确格式；不支持 PDF / DOCX，不扫描完整代码仓库，无历史数据库或多人系统。
+- 只支持明确格式的实验 CSV / JSON；部分 YOLO `results.csv` 训练历史文件尚未支持。实例诊断文件可识别，但缺少标准模型指标时不能生成标准实验报告。
+- 不支持 PDF / DOCX，不扫描完整代码仓库，无历史数据库或多人系统。
 - 使用 Chat Completions 风格接口，不支持所有 OpenAI provider 私有能力。
+- Windows EXE 已完成本地构建，但 GitHub Release 尚未发布。
 - 当前 Windows 测试环境中，Flutter analyze 在中文路径下可能导致 Analysis Server 崩溃；同一仓库经英文路径 Junction 可正常 analyze。这是 Flutter / 当前开发环境限制，不是 ProjectLens Parser 错误。
 
 ## Future Work
